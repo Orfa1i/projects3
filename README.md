@@ -28,8 +28,11 @@ Then open http://localhost:8000
 | Jump to a page | 1 · 2 · 3 · Home · End · or click the page pills (top right) |
 | Fullscreen | F |
 | Motion on/off | M (reduced motion also follows the operating-system setting) |
+| Pause / resume auto-advance | P, or the play/pause button (bottom right) |
 
-Pages never change on their own. If you press twice during a transition, the second press runs straight after the first. The page number is kept in the address (`#1`, `#2`, `#3`), so reloading keeps your place. The cursor hides after 2.5 s of no movement.
+**Auto-advance:** each project stays on screen for 5 seconds after it has fully arrived, then the next one opens; after EcoBeauty it loops back to Kitten. The thin line in the page counter (bottom left) fills up as the 5 seconds run. Any manual move restarts the 5 seconds. Change the timing or turn it off in `window.AUTOPLAY` at the top of `js/content.js` (`enabled`, `seconds`, `loop`).
+
+If you press twice during a transition, the second press runs straight after the first. The page number is kept in the address (`#1`, `#2`, `#3`), so reloading keeps your place. The cursor hides after 2.5 s of no movement.
 
 ## Where the content comes from
 

@@ -14,6 +14,10 @@
  *  accent:  the world's highlight colour — set it from the real brand once the logo arrives.
  */
 
+/* Auto-advance: moves to the next project every `seconds` after a page has fully arrived.
+   loop: after the last project it returns to the first. Press P (or the play/pause button) to pause. */
+window.AUTOPLAY = { enabled: true, seconds: 5, loop: true };
+
 /* Presenters shown on each page (top left). */
 window.PRESENTERS = {
   kitten: ["Mohammed Orfali"],

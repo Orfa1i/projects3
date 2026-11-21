@@ -120,6 +120,32 @@
   const fromHash = () => { const n = parseInt(location.hash.slice(1), 10); return n >= 1 && n <= worlds.length ? n - 1 : 0; };
   let current = fromHash();
   let busy = false;
+
+  /* ───────── auto-advance ───────── */
+  const AP = window.AUTOPLAY || {};
+  const LOOP = AP.loop !== false;
+  const DWELL = Math.max(1, +AP.seconds || 5) * 1000;
+  let playing = AP.enabled !== false;
+  let apTimer = 0;
+  const playBtn = document.querySelector("[data-play]");
+  const fill = document.querySelector(".counter-fill");
+  function stopTimer() {
+    clearTimeout(apTimer); apTimer = 0;
+    if (fill) { fill.getAnimations().forEach((a) => a.cancel()); fill.style.transform = "scaleX(0)"; }
+  }
+  function schedule() {
+    stopTimer();
+    if (!playing || busy || document.hidden) return;
+    if (fill) fill.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: DWELL, easing: "linear", fill: "forwards" });
+    apTimer = setTimeout(() => advance(1, true), DWELL);
+  }
+  function setPlaying(on) {
+    playing = on;
+    body.classList.toggle("is-playing", on);
+    if (playBtn) { playBtn.setAttribute("aria-pressed", String(on)); playBtn.setAttribute("aria-label", on ? "Pause auto-advance" : "Start auto-advance"); }
+    on ? schedule() : stopTimer();
+  }
+  document.addEventListener("visibilitychange", () => (document.hidden ? stopTimer() : schedule()));
   let queued = null;
 
   const accentOf = (w) => (P[w.dataset.key] || {}).accent || "#fff";
@@ -130,8 +156,8 @@
     setChrome.t = setTimeout(() => { body.dataset.theme = w.dataset.theme; showPresenters(w.dataset.key); }, themeDelay);
     pills.forEach((p, k) => { p.classList.toggle("is-current", k === i); p.setAttribute("aria-current", k === i ? "page" : "false"); });
     counterNow.textContent = String(i + 1).padStart(2, "0");
-    prevBtn.disabled = i === 0;
-    nextBtn.disabled = i === worlds.length - 1;
+    prevBtn.disabled = !LOOP && i === 0;
+    nextBtn.disabled = !LOOP && i === worlds.length - 1;
     worlds.forEach((x, k) => x.setAttribute("aria-hidden", String(k !== i)));
     announce.textContent = `${i + 1} of ${worlds.length}: ${w.getAttribute("aria-label")}`;
     history.replaceState(null, "", `#${i + 1}`);
@@ -157,16 +183,18 @@
     to.classList.add("is-active");
     to.getAnimations().forEach((a) => a.cancel());
     busy = false;
-    if (queued !== null) { const q = queued; queued = null; go(q); }
+    if (queued !== null) { const q = queued; queued = null; go(q); return; }
+    schedule();
   }
 
-  function go(j) {
+  function go(j, forcedDir) {
     if (j < 0 || j >= worlds.length || j === current) return;
     if (busy) { queued = j; return; }
     busy = true;
+    stopTimer();
     const from = worlds[current];
     const to = worlds[j];
-    const dir = j > current ? 1 : -1;
+    const dir = forcedDir || (j > current ? 1 : -1);
     current = j;
     setChrome(j, reduced() ? 0 : D * 0.5);
 
@@ -234,8 +262,16 @@
     clip.finished.then(() => finish(from, to));
   }
 
-  const next = () => go(current + 1);
-  const prev = () => go(current - 1);
+  function advance(step, auto) {
+    const n = worlds.length;
+    let j = current + step;
+    if (LOOP) j = (j + n) % n;
+    if (j < 0 || j >= n) return;
+    go(j, step);
+  }
+  const next = () => advance(1);
+  const prev = () => advance(-1);
+  if (playBtn) playBtn.addEventListener("click", (e) => { setPlaying(!playing); e.currentTarget.blur(); });
 
   nextBtn.addEventListener("click", (e) => { next(); e.currentTarget.blur(); });
   prevBtn.addEventListener("click", (e) => { prev(); e.currentTarget.blur(); });
@@ -255,6 +291,7 @@
         if (document.fullscreenElement) document.exitFullscreen(); else root.requestFullscreen && root.requestFullscreen();
         break;
       case "m": case "M": manual = !reduced(); applyMotion(); break;
+      case "p": case "P": case "k": case "K": setPlaying(!playing); break;
       default: return;
     }
     e.preventDefault();
@@ -292,4 +329,5 @@
   window.worlds = { go, next, prev, get current() { return current; }, get busy() { return busy; } };
 
   enterFirst();
+  setPlaying(playing);
 })();
