@@ -19,6 +19,16 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000
 
+## Live version
+
+https://orfa1i.github.io/projects3/ is served by GitHub Pages from the `gh-pages` branch. After changing `main`, update the live site with:
+
+```
+git push origin main:gh-pages
+```
+
+It refreshes a minute or two later.
+
 ## Controls
 
 | Action | Keys |
