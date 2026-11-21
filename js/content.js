@@ -22,7 +22,7 @@ window.AUTOPLAY = { enabled: true, seconds: 5, loop: true };
 window.PRESENTERS = {
   kitten: ["Mohammed Orfali"],
   hospital: ["Mohammed Orfali"],
-  ecobeauty: ["Zainab Kamil", "Mohammed Orfali"]
+  ecobeauty: ["Zainab Kamil"]
 };
 
 window.PROJECTS = {

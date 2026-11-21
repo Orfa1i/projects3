@@ -2,7 +2,7 @@
 
 A three-page interactive presentation in plain HTML, CSS and JavaScript. It needs no build step and no internet connection.
 
-Presenters: Mohammed Orfali (Kitten, Virtual Hospital); Zainab Kamil and Mohammed Orfali (EcoBeauty). Change them in `window.PRESENTERS` in `js/content.js`.
+Presenters: Mohammed Orfali (Kitten, Virtual Hospital); Zainab Kamil (EcoBeauty). Change them in `window.PRESENTERS` in `js/content.js`.
 
 ## Launch
 
