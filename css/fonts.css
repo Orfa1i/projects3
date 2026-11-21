@@ -1,0 +1,19 @@
+/* Local fonts — no network needed. Files in assets/fonts (Fontsource, SIL Open Font License). */
+@font-face{font-family:"Inter";font-style:normal;font-weight:300;font-display:swap;src:url(../assets/fonts/inter-latin-300-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/inter-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/inter-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/inter-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/cormorant-garamond-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:400;font-display:swap;src:url(../assets/fonts/cormorant-garamond-latin-400-italic.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:500;font-display:swap;src:url(../assets/fonts/cormorant-garamond-latin-500-italic.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/ibm-plex-mono-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/ibm-plex-mono-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"League Spartan";font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/league-spartan-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"League Spartan";font-style:normal;font-weight:800;font-display:swap;src:url(../assets/fonts/league-spartan-latin-800-normal.woff2) format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/plus-jakarta-sans-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/plus-jakarta-sans-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/plus-jakarta-sans-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Funnel Display";font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/funnel-display-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Funnel Display";font-style:normal;font-weight:600;font-display:swap;src:url(../assets/fonts/funnel-display-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Host Grotesk";font-style:normal;font-weight:400;font-display:swap;src:url(../assets/fonts/host-grotesk-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Host Grotesk";font-style:normal;font-weight:500;font-display:swap;src:url(../assets/fonts/host-grotesk-latin-500-normal.woff2) format("woff2")}

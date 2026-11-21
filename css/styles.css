@@ -1,0 +1,337 @@
+/* ═══════════════════════════════════════════════════════════════
+   THREE WORLDS — presentation styles
+   Content is laid out on a 1920×1080 stage that scales to fit (--s),
+   so nothing clips or overlaps on laptops; atmospheres bleed full-screen.
+   ═══════════════════════════════════════════════════════════════ */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#000}
+body{
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color:#fff;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  --s:1; --mx:0; --my:0;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+body.idle{cursor:none}
+
+/* ── Theme tokens for the shared chrome (switch per world) ── */
+body[data-theme="dark"]{--fg:#ffffff;--fg-dim:rgba(255,255,255,.55);--gb:255,255,255;--glass-bg:rgba(255,255,255,.012);--glass-on:rgba(255,255,255,.12)}
+body[data-theme="light"]{--fg:#0f2a28;--fg-dim:rgba(15,42,40,.55);--gb:15,42,40;--glass-bg:rgba(255,255,255,.28);--glass-on:rgba(15,42,40,.09)}
+body[data-theme="warm"]{--fg:#fbf1df;--fg-dim:rgba(251,241,223,.6);--gb:255,240,214;--glass-bg:rgba(255,240,214,.03);--glass-on:rgba(255,236,200,.14)}
+
+/* ── Liquid glass (from the motion reference) ── */
+.liquid-glass{
+  background:var(--glass-bg);background-blend-mode:luminosity;
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  border:none;box-shadow:inset 0 1px 1px rgba(var(--gb),.1);
+  position:relative;overflow:hidden;
+  transition:background .6s ease,color .6s ease;
+}
+.liquid-glass::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1.4px;
+  background:linear-gradient(180deg,rgba(var(--gb),.45) 0%,rgba(var(--gb),.15) 20%,rgba(var(--gb),0) 40%,rgba(var(--gb),0) 60%,rgba(var(--gb),.15) 80%,rgba(var(--gb),.45) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+
+/* ── Blur-fade-up (from the motion reference) ── */
+@keyframes blurFadeUp{from{opacity:0;filter:blur(20px);transform:translateY(40px)}to{opacity:1;filter:none;transform:none}}
+@keyframes blurFadeOut{from{opacity:1;filter:blur(0);transform:translateY(0)}to{opacity:0;filter:blur(14px);transform:translateY(-24px)}}
+.reveal{opacity:0}
+.world.is-in .reveal{animation:blurFadeUp 1.1s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:var(--d,0ms)}
+.world.is-out .reveal{animation:blurFadeOut .55s cubic-bezier(.5,0,.8,.4) forwards;animation-delay:0ms}
+
+/* ═══════════════ Worlds ═══════════════ */
+.world{position:fixed;inset:0;visibility:hidden;overflow:hidden;contain:paint}
+.world.is-active,.world.is-entering,.world.is-leaving{visibility:visible}
+.world.is-leaving{z-index:1}
+.world.is-active{z-index:2}
+.world.is-entering{z-index:3}
+/* idle worlds do not spend GPU time */
+.world:not(.is-active):not(.is-entering):not(.is-leaving) *{animation-play-state:paused!important}
+
+.atmos{position:absolute;inset:0;overflow:hidden}
+.atmos>*{position:absolute}
+.stage{position:absolute;inset:0;pointer-events:none}
+.stage-inner{
+  position:absolute;left:50%;top:50%;width:1920px;height:1080px;
+  transform:translate(-50%,-50%) scale(var(--s));transform-origin:50% 50%;
+}
+.stage-inner>*{position:absolute}
+
+/* shared bottom blur, as in the reference: blur only, no darkening */
+.bottom-blur{inset:0;pointer-events:none;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  -webkit-mask-image:linear-gradient(to top,#000 0%,transparent 26%);mask-image:linear-gradient(to top,#000 0%,transparent 26%)}
+
+/* film grain, slowly shifting */
+.grain{inset:-50%;opacity:.07;pointer-events:none;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation:grain 1.6s steps(5) infinite}
+.grain--light{opacity:.05;mix-blend-mode:multiply}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+
+/* ── Text placeholders for missing authentic material ── */
+.is-missing{
+  display:block;border:1.5px dashed currentColor;border-radius:14px;padding:18px 22px;
+  font-family:"IBM Plex Mono",monospace!important;font-size:16px!important;font-weight:400!important;
+  letter-spacing:.06em!important;line-height:1.5!important;text-transform:none!important;opacity:.55;
+}
+.is-missing::before{content:"Awaiting · ";opacity:.75}
+
+/* ── Logo slots ── */
+.logo-slot{position:relative;display:grid;place-items:center}
+.logo-slot img{width:100%;height:100%;object-fit:contain}
+.logo-slot.is-missing{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:12px;font-size:13px!important}
+
+/* ── Screens (real interface screenshots only) ── */
+.screens{position:absolute;inset:0;transform-style:flat}
+.screen{position:absolute;border-radius:18px;overflow:hidden;transform-style:preserve-3d}
+.screen img{width:100%;height:100%;object-fit:cover;object-position:top left}
+.screen.is-missing{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;text-align:center;padding:40px;font-size:18px!important}
+.screen::after{ /* moving light across the glass */
+  content:"";position:absolute;inset:-20%;pointer-events:none;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.10) 48%,rgba(255,255,255,.02) 54%,transparent 60%);
+  background-size:260% 100%;animation:sheen 11s ease-in-out infinite alternate}
+@keyframes sheen{from{background-position:120% 0}to{background-position:-20% 0}}
+
+/* ═══════════════ 1 · KITTEN — burgundy studio, the ECG telemetry line ═══════════════
+   From the Kitten Brand & Design Reference: burgundy #8D321F, studio dark #111111,
+   AI green #00BF63 with a 2 s glow pulse, the dual-phase ECG line, League Spartan + Plus Jakarta Sans. */
+.world--kitten{background:#0b0908;color:#FDF9F9}
+.k-base{inset:0;background:
+  radial-gradient(1200px 700px at 15% -10%,rgba(141,50,31,.48),transparent 60%),
+  radial-gradient(900px 600px at 105% 10%,rgba(141,50,31,.20),transparent 60%),
+  linear-gradient(180deg,#0b0908 0%,#111111 100%)}
+.k-rust{left:-12%;top:-30%;width:60vw;height:60vw;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(179,64,39,.30),rgba(141,50,31,0));
+  animation:kRust 22s ease-in-out infinite alternate}
+.k-rust--2{left:auto;right:-18%;top:auto;bottom:-40%;width:55vw;height:55vw;
+  background:radial-gradient(closest-side,rgba(141,50,31,.22),rgba(141,50,31,0));animation-duration:28s;animation-direction:alternate-reverse}
+@keyframes kRust{from{transform:translate(0,0) scale(1)}to{transform:translate(8vw,6vh) scale(1.12)}}
+.k-ecg{left:0;top:74%;width:100%;height:15vh;overflow:visible}
+.k-ecg path{fill:none;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.k-ecg-rust{stroke:#F5DDD8;stroke-width:3;opacity:.45}
+.k-ecg-ai{stroke:#00E676;stroke-width:3;opacity:.8}
+.k-ecg-ai-glow{stroke:#00BF63;stroke-width:16;opacity:.18;animation:kGreenPulse 2s ease-in-out infinite}
+@keyframes kGreenPulse{0%,100%{opacity:.12}50%{opacity:.34}}
+.k-ecg-pulse{stroke:#ffffff;stroke-width:4;stroke-dasharray:46 954;opacity:.85;
+  filter:drop-shadow(0 0 6px rgba(255,255,255,.8));animation:kBeat 5.5s linear infinite}
+@keyframes kBeat{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+
+.k-composition{left:760px;top:150px;width:1100px;height:760px;
+  transform:translate3d(calc(var(--mx)*-16px),calc(var(--my)*-10px),0)}
+.screens--kitten{perspective:2200px}
+.screens--kitten .screen{background:#141211;animation:kFloat 15s ease-in-out infinite alternate;
+  box-shadow:0 50px 140px rgba(0,0,0,.7),0 0 0 1px rgba(245,221,216,.14),0 0 140px rgba(141,50,31,.30)}
+.screens--kitten .screen img{object-fit:contain;object-position:center}
+.screens--kitten .screen--1{left:90px;top:30px;width:1010px;height:568px;z-index:2;border-radius:18px;background:#000}
+.screens--kitten .screen--2{left:-10px;top:520px;width:640px;height:172px;z-index:3;border-radius:14px;animation-duration:12s;animation-name:kFloat2}
+.screens--kitten .screen--3{left:120px;top:600px;width:600px;height:160px;z-index:1;opacity:.8}
+.screens--kitten .screen.is-missing{color:#E1998C;background:rgba(17,17,17,.6)}
+@keyframes kFloat{from{transform:rotateY(-13deg) rotateX(5deg) translate3d(0,8px,0)}to{transform:rotateY(-8deg) rotateX(3deg) translate3d(0,-10px,0)}}
+@keyframes kFloat2{from{transform:rotateY(-13deg) rotateX(5deg) translate3d(-6px,0,0)}to{transform:rotateY(-8deg) rotateX(3deg) translate3d(10px,-14px,0)}}
+
+.k-text{left:130px;top:200px;width:610px}
+.k-title{font-family:"League Spartan","Inter",sans-serif;font-weight:800;font-size:220px;line-height:.92;letter-spacing:-.04em;color:#FDF9F9;margin-left:-8px}
+.k-sub{font-family:"League Spartan","Inter",sans-serif;font-weight:700;font-size:44px;line-height:1.08;letter-spacing:-.01em;color:#F5DDD8;margin:16px 0 34px;max-width:560px}
+.k-intro{font-family:"Plus Jakarta Sans","Inter",sans-serif;font-weight:400;font-size:25px;line-height:1.5;color:rgba(242,236,235,.84);max-width:600px}
+.world--kitten .lines p{font-family:"Plus Jakarta Sans","Inter",sans-serif;font-size:20px;color:#E6DAD8}
+.k-note{font-family:"Plus Jakarta Sans","Inter",sans-serif;color:#CFC6C4;border-left-color:#00BF63}
+.k-intro.is-missing,.world--kitten .note.is-missing{color:#E1998C}
+
+.lines p{font-size:21px;line-height:1.5;opacity:.72;margin-top:14px}
+.note{margin-top:28px;font-size:17px;line-height:1.5;opacity:.62;padding-left:16px;border-left:1.5px solid currentColor;max-width:560px}
+.note:empty,.lines:empty{display:none}
+
+/* ═══════════════ 2 · VIRTUAL HOSPITAL — Asklevia light, the spectrum bands ═══════════════
+   From the Virtual Hospital artifacts: paper #F7F8FB, ink #0F1222, graphite #4A5068,
+   the neural spectrum (indigo → violet → blue → teal → verdant), bands angled like the mark,
+   Funnel Display + Host Grotesk. Light mode only. */
+.world--hospital{background:#F7F8FB;color:#0F1222}
+.h-base{inset:0;background:linear-gradient(180deg,#FAFBFD 0%,#F4F6FA 60%,#EEF1F7 100%)}
+.h-sun{left:-15%;top:-35%;width:80vw;height:100vh;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(255,255,255,0));
+  animation:hSun 30s ease-in-out infinite alternate}
+@keyframes hSun{from{transform:translate(0,0)}to{transform:translate(12vw,5vh)}}
+.h-bands{inset:0;pointer-events:none}
+.h-bands i{position:absolute;border-radius:999px;transform-origin:50% 50%}
+.h-bands .b1{left:44%;top:66%;width:62vw;height:8.4vw;background:#CFEBDF;opacity:.75;--r:-22.4deg;animation:hBand 26s ease-in-out infinite alternate}
+.h-bands .b2{left:58%;top:4%;width:48vw;height:6.4vw;background:#D9D3FB;opacity:.5;--r:-22.4deg;animation:hBand 32s ease-in-out infinite alternate-reverse}
+.h-bands .b3{left:-24%;top:47%;width:70vw;height:4.6vw;background:#D3E4FA;opacity:.6;--r:0deg;animation:hBandH 28s ease-in-out infinite alternate}
+.h-bands .b4{left:-10%;top:-8%;width:40vw;height:4vw;background:#CDEDF0;opacity:.55;--r:-22.4deg;animation:hBand 36s ease-in-out infinite alternate}
+@keyframes hBand{from{transform:rotate(var(--r)) translateX(-4vw)}to{transform:rotate(var(--r)) translateX(4vw)}}
+@keyframes hBandH{from{transform:translateX(-3vw);opacity:.45}to{transform:translateX(5vw);opacity:.7}}
+
+.h-composition{left:60px;top:150px;width:1080px;height:780px;
+  transform:translate3d(calc(var(--mx)*-14px),calc(var(--my)*-8px),0)}
+.screens--hospital{perspective:2400px}
+.screens--hospital .screen{background:#fff;animation:hFloat 16s ease-in-out infinite alternate;
+  box-shadow:0 1px 2px rgba(15,18,34,.05),0 40px 110px rgba(31,36,90,.16),0 0 0 1px rgba(15,18,34,.07)}
+.screens--hospital .screen img{object-fit:cover;object-position:top left}
+.screens--hospital .screen--1{left:20px;top:40px;width:980px;height:426px;z-index:1}
+.screens--hospital .screen--2{left:650px;top:140px;width:390px;height:421px;z-index:3;border-radius:22px;animation-name:hFloat2;animation-duration:12s;
+  box-shadow:0 1px 2px rgba(15,18,34,.06),0 50px 110px rgba(31,36,90,.24),0 0 0 1px rgba(15,18,34,.08)}
+.screens--hospital .screen--3{left:0;top:560px;width:520px;height:220px;z-index:2}
+.screens--hospital .screen.is-missing{color:#2B2FD9;background:rgba(255,255,255,.6)}
+.screens--hospital .screen::after{background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.45) 48%,transparent 58%);background-size:260% 100%}
+@keyframes hFloat{from{transform:rotateY(9deg) rotateX(2deg) translate3d(0,8px,0)}to{transform:rotateY(5deg) rotateX(1deg) translate3d(0,-8px,0)}}
+@keyframes hFloat2{from{transform:rotateY(5deg) translate3d(0,10px,0)}to{transform:rotateY(2deg) translate3d(-8px,-12px,0)}}
+
+/* the seven specialist agents — a living row under the screens */
+.h-agents{position:absolute;left:20px;top:560px;width:1040px;pointer-events:none}
+.h-agents-cap{width:600px;font-family:"Host Grotesk","Inter",sans-serif;font-size:17px;line-height:1.45;color:#4A5068}
+.h-agents-row{position:relative;display:flex;justify-content:space-between;margin-top:26px;width:1040px}
+.h-agents-row::before{ /* the shared line the agents stand on, with a travelling light */
+  content:"";position:absolute;left:44px;right:44px;top:42px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.95) 50%,transparent 100%) 0 0/24% 100% no-repeat,
+             linear-gradient(90deg,#2B2FD9,#5B3DF5 25%,#1F7BEA 50%,#0E9AA7 75%,#13A06B);
+  opacity:.45;animation:hWire 6s ease-in-out infinite}
+@keyframes hWire{from{background-position:-30% 0,0 0}to{background-position:130% 0,0 0}}
+.agent-chip{position:relative;width:140px;margin:0;display:flex;flex-direction:column;align-items:center;text-align:center}
+.agent-bob{display:block;animation:hBob 4.6s ease-in-out infinite;animation-delay:var(--bob,0s)}
+@keyframes hBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.agent-chip .face{display:block;width:84px;height:84px;border-radius:50%;overflow:hidden;
+  box-shadow:0 8px 22px rgba(31,36,90,.16),0 0 0 3px #fff,0 0 0 5px color-mix(in srgb,var(--c) 35%,transparent)}
+.agent-chip .face svg{width:100%;height:100%;display:block}
+.agent-chip figcaption{margin-top:12px;font-family:"Host Grotesk","Inter",sans-serif;font-weight:500;font-size:15.5px;line-height:1.25;color:#0F1222}
+/* living faces — same motion language as the Staff Roster */
+.face .eye,.face .mouth,.face .talk,.face .hd,.face .nn,.face .led,.face .cheek,.face .pod,.face .beam{transform-box:fill-box;transform-origin:center}
+.face .eye{animation:vhBlink 5.6s infinite;animation-delay:var(--bd,0s)}
+.face .led{animation:vhLed .9s ease-in-out infinite}
+.face .trace{stroke-dasharray:260;animation:vhTrace 2.6s linear infinite}
+.face .nn{animation:vhNn 2.4s ease-in-out infinite}
+.face .nn:nth-of-type(2){animation-delay:.3s}
+.face .nn:nth-of-type(3){animation-delay:.6s}
+.face .beam{animation:vhBeam 3.2s ease-in-out infinite}
+@keyframes vhBlink{0%,93%,100%{transform:scaleY(1)}95.5%{transform:scaleY(.08)}}
+@keyframes vhLed{50%{opacity:.35}}
+@keyframes vhTrace{from{stroke-dashoffset:520}to{stroke-dashoffset:0}}
+@keyframes vhNn{50%{transform:scale(1.35)}}
+@keyframes vhBeam{50%{transform:scale(1.25);opacity:.2}}
+
+.h-text{left:1180px;top:196px;width:630px}
+.logo-slot--hospital{width:470px;height:84px;margin-bottom:46px;color:#2B2FD9}
+.logo-slot--hospital img{object-position:left center}
+.h-title{font-family:"Funnel Display","Inter",sans-serif;font-weight:500;font-size:68px;line-height:1.06;letter-spacing:-.02em;color:#0F1222}
+.h-intro{font-family:"Host Grotesk","Inter",sans-serif;font-weight:400;font-size:23px;line-height:1.55;color:#4A5068;margin-top:28px}
+.h-lines p{font-family:"Host Grotesk","Inter",sans-serif;font-size:19px;color:#4A5068;opacity:1;display:flex;align-items:center;gap:14px}
+.h-lines p::before{content:"";flex:none;width:28px;height:5px;border-radius:3px;background:linear-gradient(90deg,#2B2FD9,#5B3DF5 25%,#1F7BEA 50%,#0E9AA7 75%,#13A06B)}
+.h-note{font-family:"Host Grotesk","Inter",sans-serif;font-size:16px;line-height:1.5;color:#5E3A00;opacity:1;
+  background:#FBF1E2;border:1px solid #F0DDBF;border-radius:12px;padding:12px 16px;max-width:630px}
+.h-intro.is-missing,.world--hospital .note.is-missing{color:#2B2FD9}
+
+/* ═══════════════ 3 · ECOBEAUTY — amber glass, light through bottles ═══════════════ */
+.world--eco{background:#160b03;color:#fbf1df}
+.e-photo{inset:-6%}
+.e-photo-img{position:absolute;inset:0;background:url(../assets/ecobeauty/eco-bottles-bg.jpg) center/cover no-repeat;
+  filter:blur(1.5px) saturate(1.06);animation:eDrift 28s ease-in-out infinite alternate}
+@keyframes eDrift{from{transform:translate3d(-1%,.8%,0) scale(1.03)}to{transform:translate3d(1%,-.8%,0) scale(1.07)}}
+.e-fg{top:-6%;right:-6%;height:112%;aspect-ratio:544/1212}
+.e-fg-img{position:absolute;inset:0;background:url(../assets/ecobeauty/eco-bottles-fg.png) right center/contain no-repeat;
+  animation:eFg 28s ease-in-out infinite alternate}
+@keyframes eFg{from{transform:translate3d(-1.8%,1.4%,0) scale(1.03)}to{transform:translate3d(1.6%,-1.4%,0) scale(1.08)}}
+.e-shade{inset:0;background:
+  linear-gradient(90deg,rgba(20,10,3,.94) 0%,rgba(24,12,4,.82) 30%,rgba(28,14,5,.48) 58%,rgba(28,14,5,.14) 82%,rgba(28,14,5,.05) 100%),
+  radial-gradient(ellipse 50% 40% at 62% 70%,rgba(18,9,3,.55),transparent 75%)}
+.e-caustics{inset:0;mix-blend-mode:screen;pointer-events:none}
+.e-caustics i{position:absolute;border-radius:50%}
+.e-caustics i:nth-child(1){left:48%;top:8%;width:38vw;height:38vw;background:radial-gradient(closest-side,rgba(255,196,96,.22),transparent);animation:eC1 22s ease-in-out infinite alternate}
+.e-caustics i:nth-child(2){left:70%;top:46%;width:30vw;height:30vw;background:radial-gradient(closest-side,rgba(255,226,150,.18),transparent);animation:eC2 26s ease-in-out infinite alternate}
+.e-caustics i:nth-child(3){left:18%;top:52%;width:34vw;height:34vw;background:radial-gradient(closest-side,rgba(214,150,60,.14),transparent);animation:eC3 19s ease-in-out infinite alternate}
+@keyframes eC1{from{transform:translate(0,0) scale(1)}to{transform:translate(-8vw,6vh) scale(1.2)}}
+@keyframes eC2{from{transform:translate(0,0) scale(1.1)}to{transform:translate(-6vw,-8vh) scale(.9)}}
+@keyframes eC3{from{transform:translate(0,0)}to{transform:translate(10vw,-6vh) scale(1.15)}}
+.e-sweep{inset:0;mix-blend-mode:screen;pointer-events:none;
+  background:linear-gradient(115deg,transparent 42%,rgba(255,214,140,.10) 49%,rgba(255,240,200,.16) 50%,rgba(255,214,140,.10) 51%,transparent 58%);
+  background-size:320% 100%;animation:eSweep 16s ease-in-out infinite alternate}
+@keyframes eSweep{from{background-position:100% 0}to{background-position:0% 0}}
+
+/* logo plate — a cream capsule, echoing the logo's own outline */
+.e-plate{left:140px;top:160px;width:400px;height:700px;border-radius:200px;
+  background:linear-gradient(170deg,#fdfaf3 0%,#f6efe1 60%,#efe4cf 100%);
+  box-shadow:0 60px 140px rgba(0,0,0,.5),0 0 0 1px rgba(255,240,210,.5),inset 0 1px 0 #fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:105px;overflow:hidden}
+.e-plate-glow{position:absolute;inset:0;border-radius:inherit;pointer-events:none;mix-blend-mode:multiply;
+  background:linear-gradient(120deg,transparent 30%,rgba(232,196,128,.35) 50%,transparent 70%);
+  background-size:300% 300%;animation:ePlate 14s ease-in-out infinite alternate}
+@keyframes ePlate{from{background-position:100% 100%}to{background-position:0% 0%}}
+.e-logo{width:300px;height:auto;position:relative}
+
+.e-text{left:640px;top:150px;width:1120px}
+.e-eyebrow{font-weight:500;font-size:19px;letter-spacing:.34em;text-transform:uppercase;color:#e8c98f;margin-bottom:18px}
+.e-title{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:70px;line-height:1.02;letter-spacing:-.005em;color:#fdf3e1;max-width:1100px}
+.e-intro{font-weight:300;font-size:24px;line-height:1.5;color:rgba(251,241,223,.84);max-width:960px;margin-top:24px}
+.e-lines p{font-size:19px;line-height:1.5;opacity:.7;margin-top:10px;max-width:960px}
+
+.e-flow{left:640px;top:530px;width:1160px;height:400px}
+.e-flow-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.e-line{fill:none;stroke:url(#lineWarm);stroke-width:1.6;stroke-dasharray:3 7;animation:dash 6s linear infinite}
+.e-line--hand{stroke:rgba(236,244,232,.45);stroke-dasharray:2 8}
+.e-line--out{stroke:rgba(246,231,200,.5)}
+@keyframes dash{to{stroke-dashoffset:-100}}
+.node{position:absolute;border-radius:28px;padding:18px 24px 20px;
+  background:linear-gradient(160deg,rgba(40,22,8,.62),rgba(30,16,6,.5));
+  -webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);
+  box-shadow:inset 0 1px 1px rgba(255,236,200,.18),0 20px 50px rgba(0,0,0,.3)}
+.node::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.4px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,232,190,.5),rgba(255,232,190,.12) 30%,rgba(255,232,190,0) 50%,rgba(255,232,190,.12) 75%,rgba(255,232,190,.45));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.node b{display:block;font-family:"Cormorant Garamond",serif;font-weight:500;font-size:32px;line-height:1.05;color:#fff4de;margin-bottom:6px}
+.node span{display:block;font-size:17.5px;line-height:1.42;color:rgba(251,241,223,.78)}
+.node--scan{left:0;top:132px;width:210px}
+.node--ai{left:300px;top:132px;width:230px}
+.node--rep{left:640px;top:8px;width:270px}
+.node--rec{left:640px;top:262px;width:270px}
+.node--rep b{color:#f6cf7c}
+.node--rec b{color:#e6efe0}
+.out{position:absolute;left:968px;width:192px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:22px;line-height:1.2;color:rgba(253,243,225,.88)}
+.out--rep{top:40px}
+.out--rec{top:300px}
+.handoff{position:absolute;left:790px;top:180px;width:180px;font-size:15.5px;line-height:1.35;letter-spacing:.02em;color:rgba(236,244,232,.72)}
+
+.e-note{left:640px;top:952px;width:1000px;font-size:16px;line-height:1.4;color:rgba(251,241,223,.6);padding-left:14px;border-left:1.5px solid rgba(232,201,143,.6)}
+.e-closing{left:180px;top:690px;width:320px;text-align:center;z-index:2;
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:500;font-size:22px;line-height:1.3;color:#4c5a22}
+
+/* ═══════════════ Shared chrome ═══════════════ */
+.chrome{position:fixed;inset:0;z-index:50;pointer-events:none;color:var(--fg);transition:color .8s ease}
+.chrome>*{pointer-events:auto;position:absolute;transition:opacity .6s ease}
+.presenters{left:calc(64px*var(--s));top:calc(54px*var(--s));
+  font-size:calc(16px*var(--s));letter-spacing:.14em;text-transform:uppercase;color:var(--fg-dim);transition:color .8s ease}
+.presenters span+span::before{content:"";display:inline-block;width:calc(5px*var(--s));height:calc(5px*var(--s));border-radius:50%;background:currentColor;margin:0 calc(14px*var(--s));vertical-align:middle;opacity:.7}
+
+.indicator{right:calc(64px*var(--s));top:calc(40px*var(--s));display:flex;gap:calc(10px*var(--s))}
+.pill{height:calc(46px*var(--s));border-radius:999px;padding:0 calc(18px*var(--s));display:flex;align-items:center;gap:0;
+  font-size:calc(15px*var(--s));color:var(--fg-dim)}
+.pill-num{font-family:"IBM Plex Mono",monospace;font-size:calc(14px*var(--s));letter-spacing:.06em}
+.pill-name{display:inline-block;max-width:0;overflow:hidden;white-space:nowrap;opacity:0;
+  transition:max-width .9s cubic-bezier(.7,0,.2,1),opacity .6s ease,margin .9s cubic-bezier(.7,0,.2,1);font-weight:500}
+.pill.is-current{background:var(--glass-on);color:var(--fg)}
+.pill.is-current .pill-name{max-width:calc(220px*var(--s));opacity:1;margin-left:calc(12px*var(--s))}
+.pill:hover{color:var(--fg)}
+
+.counter{left:calc(64px*var(--s));bottom:calc(50px*var(--s));display:flex;align-items:center;gap:calc(14px*var(--s));
+  font-family:"IBM Plex Mono",monospace;font-size:calc(15px*var(--s));color:var(--fg-dim);letter-spacing:.08em}
+.counter-now{color:var(--fg);font-size:calc(22px*var(--s))}
+.counter-sep{width:calc(56px*var(--s));height:1px;background:currentColor;opacity:.5}
+
+.arrows{right:calc(64px*var(--s));bottom:calc(44px*var(--s));display:flex;gap:calc(12px*var(--s))}
+.arrow{height:calc(52px*var(--s));border-radius:999px;padding:0 calc(24px*var(--s));display:flex;align-items:center;gap:calc(10px*var(--s));
+  font-size:calc(16px*var(--s));font-weight:500;color:var(--fg)}
+.arrow svg{width:calc(18px*var(--s));height:calc(18px*var(--s))}
+.arrow:hover,.pill:hover{background:var(--glass-on)}
+.arrow:disabled{opacity:.3;cursor:default}
+.arrow:focus-visible,.pill:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+body.idle .chrome>*{opacity:.35}
+
+/* ═══════════════ Transition ring (shared element) ═══════════════ */
+.portal-ring{position:fixed;z-index:40;pointer-events:none;opacity:0;border-radius:999px;
+  border:1.5px solid var(--ring,#fff);box-shadow:0 0 40px var(--ring,#fff),inset 0 0 30px var(--ring,#fff)}
+
+/* ═══════════════ Reduced motion ═══════════════ */
+.reduce-motion .world *,.reduce-motion .world *::after,.reduce-motion .world *::before{animation:none!important}
+.reduce-motion .reveal{opacity:1!important;filter:none!important;transform:none!important}
+.reduce-motion .world.is-out .reveal{opacity:1!important}
+.reduce-motion .pill-name{transition:none}

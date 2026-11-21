@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kitten · Virtual Hospital · EcoBeauty</title>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-theme="dark">
+
+<main id="worlds" aria-live="off">
+
+  <!-- ═════════════════ 1 · KITTEN ═════════════════ -->
+  <section class="world world--kitten" data-key="kitten" data-theme="dark" aria-label="Kitten Medical Imaging AI Workstation">
+    <div class="atmos">
+      <div class="k-base"></div>
+      <div class="k-rust"></div>
+      <div class="k-rust k-rust--2"></div>
+      <svg class="k-ecg" viewBox="0 0 1920 160" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="kEcgFade" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".12" stop-color="#fff"/><stop offset=".88" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+          <mask id="kEcgMask"><rect width="1920" height="160" fill="url(#kEcgFade)"/></mask>
+        </defs>
+        <g mask="url(#kEcgMask)">
+          <path class="k-ecg-rust" d="M0 80 H620 L650 80 L670 60 L690 80 L740 80 L765 10 L800 150 L830 80 L900 80 L920 60 L940 80 H1000"/>
+          <path class="k-ecg-ai-glow" d="M1000 80 H1100 L1125 60 L1145 80 L1190 80 L1215 10 L1250 150 L1280 80 L1350 80 L1370 60 L1390 80 H1920"/>
+          <path class="k-ecg-ai" d="M1000 80 H1100 L1125 60 L1145 80 L1190 80 L1215 10 L1250 150 L1280 80 L1350 80 L1370 60 L1390 80 H1920"/>
+          <path class="k-ecg-pulse" pathLength="1000" d="M0 80 H620 L650 80 L670 60 L690 80 L740 80 L765 10 L800 150 L830 80 L900 80 L920 60 L940 80 H1100 L1125 60 L1145 80 L1190 80 L1215 10 L1250 150 L1280 80 L1350 80 L1370 60 L1390 80 H1920"/>
+        </g>
+      </svg>
+      <div class="grain"></div>
+      <div class="bottom-blur"></div>
+    </div>
+
+    <div class="stage"><div class="stage-inner">
+      <div class="k-composition">
+        <div class="screens screens--kitten" data-screens="kitten"></div>
+      </div>
+
+      <div class="k-text">
+        <h1 class="k-title reveal" style="--d:0ms" data-bind="kitten.title"></h1>
+        <p class="k-sub reveal" style="--d:120ms" data-bind="kitten.subtitle"></p>
+        <p class="intro k-intro reveal" style="--d:240ms" data-bind="kitten.intro" data-need="Introduction — from the Kitten project description"></p>
+        <div class="lines reveal" style="--d:340ms" data-lines="kitten"></div>
+        <p class="note k-note reveal" style="--d:440ms" data-bind="kitten.note" data-need="Prototype status — as stated in the materials"></p>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ═════════════════ 2 · ASKLEVIA VIRTUAL HOSPITAL ═════════════════ -->
+  <section class="world world--hospital" data-key="hospital" data-theme="light" aria-label="Virtual Hospital by Asklevia">
+    <div class="atmos">
+      <div class="h-base"></div>
+      <div class="h-sun"></div>
+      <div class="h-bands">
+        <i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i>
+      </div>
+      <div class="grain grain--light"></div>
+      <div class="bottom-blur"></div>
+    </div>
+
+    <div class="stage"><div class="stage-inner">
+      <div class="h-composition">
+        <div class="screens screens--hospital" data-screens="hospital"></div>
+        <div class="h-agents">
+          <p class="h-agents-cap reveal" style="--d:520ms" data-bind="hospital.agentsCaption"></p>
+          <div class="h-agents-row" data-agents></div>
+        </div>
+      </div>
+
+      <div class="h-text">
+        <div class="logo-slot logo-slot--hospital reveal" style="--d:0ms" data-logo="hospital"></div>
+        <h1 class="h-title reveal" style="--d:120ms" data-bind="hospital.title"></h1>
+        <p class="intro h-intro reveal" style="--d:240ms" data-bind="hospital.intro" data-need="Introduction — from the Virtual Hospital project description"></p>
+        <div class="lines h-lines reveal" style="--d:340ms" data-lines="hospital"></div>
+        <p class="note h-note reveal" style="--d:440ms" data-bind="hospital.note" data-need="Prototype status — as stated in the materials"></p>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ═════════════════ 3 · ECOBEAUTY ═════════════════ -->
+  <section class="world world--eco" data-key="ecobeauty" data-theme="warm" aria-label="EcoBeauty">
+    <div class="atmos">
+      <div class="e-photo"><div class="e-photo-img"></div></div>
+      <div class="e-fg"><div class="e-fg-img"></div></div>
+      <div class="e-shade"></div>
+      <div class="e-caustics"><i></i><i></i><i></i></div>
+      <div class="e-sweep"></div>
+      <div class="grain"></div>
+      <div class="bottom-blur"></div>
+    </div>
+
+    <div class="stage"><div class="stage-inner">
+      <div class="e-plate reveal" style="--d:0ms">
+        <div class="e-plate-glow"></div>
+        <img class="e-logo" data-logo-img="ecobeauty" alt="EcoBeauty logo">
+      </div>
+
+      <div class="e-text">
+        <p class="e-eyebrow reveal" style="--d:120ms" data-bind="ecobeauty.eyebrow"></p>
+        <h1 class="e-title reveal" style="--d:200ms" data-bind="ecobeauty.title"></h1>
+        <p class="intro e-intro reveal" style="--d:320ms" data-bind="ecobeauty.intro"></p>
+        <div class="lines e-lines reveal" style="--d:400ms" data-lines="ecobeauty"></div>
+      </div>
+
+      <div class="e-flow reveal" style="--d:520ms">
+        <svg class="e-flow-svg" viewBox="0 0 1160 400" aria-hidden="true">
+          <defs>
+            <radialGradient id="dropAmber"><stop offset="0" stop-color="#fff3c9"/><stop offset=".45" stop-color="#f1c15c"/><stop offset="1" stop-color="#f1c15c" stop-opacity="0"/></radialGradient>
+            <radialGradient id="dropGlass"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#e9f1e6" stop-opacity=".8"/><stop offset="1" stop-color="#e9f1e6" stop-opacity="0"/></radialGradient>
+            <linearGradient id="lineWarm" x1="0" x2="1"><stop offset="0" stop-color="#f6e7c8" stop-opacity=".15"/><stop offset="1" stop-color="#f6e7c8" stop-opacity=".55"/></linearGradient>
+          </defs>
+          <path id="pScan"   class="e-line" d="M 210 200 L 300 200"/>
+          <path id="pRep"    class="e-line" d="M 530 200 C 590 200, 580 72, 640 72"/>
+          <path id="pRec"    class="e-line" d="M 530 200 C 590 200, 580 328, 640 328"/>
+          <path id="pHand"   class="e-line e-line--hand" d="M 775 134 C 775 190, 775 210, 775 266"/>
+          <path id="pRepOut" class="e-line e-line--out" d="M 910 72 L 956 72"/>
+          <path id="pRecOut" class="e-line e-line--out" d="M 910 328 L 956 328"/>
+
+          <g class="drops">
+            <circle r="7" fill="url(#dropAmber)"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#pScan"/></animateMotion></circle>
+            <circle r="7" fill="url(#dropAmber)"><animateMotion dur="2.6s" begin="1.3s" repeatCount="indefinite"><mpath href="#pScan"/></animateMotion></circle>
+            <circle r="8" fill="url(#dropAmber)"><animateMotion dur="3.4s" repeatCount="indefinite"><mpath href="#pRep"/></animateMotion></circle>
+            <circle r="8" fill="url(#dropAmber)"><animateMotion dur="3.4s" begin="1.7s" repeatCount="indefinite"><mpath href="#pRep"/></animateMotion></circle>
+            <circle r="8" fill="url(#dropGlass)"><animateMotion dur="3.8s" begin=".6s" repeatCount="indefinite"><mpath href="#pRec"/></animateMotion></circle>
+            <circle r="8" fill="url(#dropGlass)"><animateMotion dur="3.8s" begin="2.5s" repeatCount="indefinite"><mpath href="#pRec"/></animateMotion></circle>
+            <circle r="7" fill="url(#dropGlass)"><animateMotion dur="4.2s" begin="1s" repeatCount="indefinite"><mpath href="#pHand"/></animateMotion></circle>
+            <circle r="6" fill="url(#dropAmber)"><animateMotion dur="2.2s" begin=".4s" repeatCount="indefinite"><mpath href="#pRepOut"/></animateMotion></circle>
+            <circle r="6" fill="url(#dropGlass)"><animateMotion dur="2.2s" begin="1.4s" repeatCount="indefinite"><mpath href="#pRecOut"/></animateMotion></circle>
+          </g>
+        </svg>
+
+        <div class="node node--scan"><b data-bind="ecobeauty.flow.scan.title"></b><span data-bind="ecobeauty.flow.scan.text"></span></div>
+        <div class="node node--ai"><b data-bind="ecobeauty.flow.ai.title"></b><span data-bind="ecobeauty.flow.ai.text"></span></div>
+        <div class="node node--rep"><b data-bind="ecobeauty.flow.repurpose.title"></b><span data-bind="ecobeauty.flow.repurpose.text"></span></div>
+        <div class="node node--rec"><b data-bind="ecobeauty.flow.recycle.title"></b><span data-bind="ecobeauty.flow.recycle.text"></span></div>
+        <p class="out out--rep" data-bind="ecobeauty.flow.repurposeOut"></p>
+        <p class="out out--rec" data-bind="ecobeauty.flow.recycleOut"></p>
+        <p class="handoff" data-bind="ecobeauty.flow.handoff"></p>
+      </div>
+
+      <p class="e-note reveal" style="--d:620ms" data-bind="ecobeauty.note"></p>
+      <p class="e-closing reveal" style="--d:700ms" data-bind="ecobeauty.closing"></p>
+    </div></div>
+  </section>
+
+</main>
+
+<!-- Shared transition element: the capsule that carries you between worlds -->
+<div class="portal-ring" aria-hidden="true"></div>
+
+<!-- ═════════════════ Consistent controls ═════════════════ -->
+<div class="chrome">
+  <div class="presenters" data-presenters></div>
+
+  <nav class="indicator" aria-label="Projects">
+    <button class="pill liquid-glass" data-go="0"><span class="pill-num">01</span><span class="pill-name">Kitten</span></button>
+    <button class="pill liquid-glass" data-go="1"><span class="pill-num">02</span><span class="pill-name">Virtual Hospital</span></button>
+    <button class="pill liquid-glass" data-go="2"><span class="pill-num">03</span><span class="pill-name">EcoBeauty</span></button>
+  </nav>
+
+  <div class="counter" aria-hidden="true"><span class="counter-now">01</span><span class="counter-sep"></span><span class="counter-total">03</span></div>
+
+  <div class="arrows">
+    <button class="arrow liquid-glass" data-prev aria-label="Previous project">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Previous</span>
+    </button>
+    <button class="arrow liquid-glass" data-next aria-label="Next project">
+      <span>Next</span>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+  </div>
+</div>
+
+<p class="sr-only" id="announce" aria-live="polite"></p>
+
+<script src="js/content.js"></script>
+<script src="js/agents.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
